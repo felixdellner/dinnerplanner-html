@@ -3,7 +3,8 @@ class DinnerModel {
 
   constructor() {
     this.dishes = dishesConst;
-
+    this.ordered = [];
+    this.guests = 0;
     //TODO Lab 0
     // implement the data structure that will hold number of guests
     // and selected dishes for the dinner menu
@@ -11,20 +12,29 @@ class DinnerModel {
   }
 
   setNumberOfGuests(num) {
+    if(num > 0)
+    this.guests = num;
     //TODO Lab 0
   }
 
   getNumberOfGuests() {
     //TODO Lab 0
+    return this.guests;
   }
 
-  //Returns the dish that is on the menu for selected type 
+  //Returns the dish that is on the menu for selected type
   getSelectedDish(type) {
+    for(let dish in this.ordered) {
+      if(this.ordered[dish].type == type) {
+        return this.ordered[dish];
+      }
+    }
     //TODO Lab 0
   }
 
   //Returns all the dishes on the menu.
   getFullMenu() {
+    return this.ordered;
     //TODO Lab 0
   }
 
@@ -41,12 +51,28 @@ class DinnerModel {
   //Adds the passed dish to the menu. If the dish of that type already exists on the menu
   //it is removed from the menu and the new one added.
   addDishToMenu(id) {
-    //TODO Lab 0 
+    const newDish = this.getDish(id);
+    const oldDish = this.getSelectedDish(newDish.type);
+    if(oldDish != null) {
+      this.removeDishFromMenu(oldDish.id);
+    }
+    this.ordered.push(this.getDish(id));
+    //TODO Lab 0
   }
 
   //Removes dish from menu
   removeDishFromMenu(id) {
     //TODO Lab 0
+
+    let remove = null;
+    for(let i = 0; i < this.ordered.length; i++) {
+      if(this.ordered[i].id == id) {
+        remove = i;
+      }
+    }
+    if(remove != null) {
+      this.ordered.splice(remove, 1);
+    }
   }
 
 
@@ -82,11 +108,11 @@ class DinnerModel {
   }
 }
 
-// the dishes constant contains an array of all the 
+// the dishes constant contains an array of all the
 // dishes in the database. Each dish has id, name, type,
 // image (name of the image file), description and
-// array of ingredients. Each ingredient has name, 
-// quantity (a number), price (a number) and unit (string 
+// array of ingredients. Each ingredient has name,
+// quantity (a number), price (a number) and unit (string
 // defining the unit i.e. "g", "slices", "ml". Unit
 // can sometimes be empty like in the example of eggs where
 // you just say "5 eggs" and not "5 pieces of eggs" or anything else.
@@ -349,4 +375,3 @@ function deepFreeze(o) {
 }
 
 deepFreeze(dishesConst);
-
